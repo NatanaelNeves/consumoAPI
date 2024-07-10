@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotação de moedas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        div {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-size: 1.2em;
+            color: #333;
+        }
+        input, select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #444;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            color: #333;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Cotação de moedas</h1>
+        <form action="#">
+            <label for="valor">Valor a converter em R$:</label>
+            <input type="text" id="valor" name="valor">
+            <label for="moeda">Moeda</label>
+            <select name="moeda" id="moeda">
+                <option value="USD">Dólar</option>
+                <option value="EUR">Euro</option>
+                <option value="GBP">Libra</option>
+                <option value="ARS">Peso Argentino</option>
+                <option value="BTC">Bitcoin</option>
+            </select>
+            <button type="button" onclick="cotacao()">Converter</button>
+
+
+        </form>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        async function cotacao() {
+            let valor = document.getElementById('valor').value;
+            let moeda = document.getElementById('moeda').value;
+            let url = `https://economia.awesomeapi.com.br/json/all/${moeda}-BRL`;
+            let resposta = await fetch(url);
+            let dados = await resposta.json();
+            let cotacao = dados[moeda].high;
+            let resultado = valor * cotacao;
+            let dataCotacao = dados[moeda].create_date;
+            document.getElementById('resultado').innerHTML = `O valor de R$ ${valor} em ${moeda} é de $ ${resultado.toFixed(2)} <br> Cotação válida para: ${dataCotacao}`;
+        }
+        
+    </script>
+</body>
+</html>
